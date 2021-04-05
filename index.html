@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<head>
+	<title>Escape from Vantablack</title>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="js/break_eternity.js"></script>
+	<script src="js/news.js"></script>
+	<script src="js/playerControl.js"></script>
+	<script src="js/format.js"></script>
+	<script src="js/temp.js"></script>
+	<script src="js/game.js"></script>
+	<script src="js/v.js"></script>
+	
+	<script src="js/main.js"></script>
+	<script src="js/pp.js"></script> <!-- haha pp -->
+	<script src="js/lumens.js"></script>
+	<script src="js/growth.js"></script>
+	<script src="js/cut.js"></script>
+	<script src="js/truphot.js"></script>
+</head>
+<body onload="loadGame()">
+	<div id="app" style="background-color: black;" v-bind:style="{'background-color': (tmp.bw.lt(0.5)?('#'+('0'+tmp.bw.times(256).round().toNumber().toString(16)).slice(-2).repeat(3)):('#'+('0'+Decimal.sub(1, tmp.bw).times(256).round().toNumber().toString(16)).slice(-2).repeat(3))), color: 'white', 'text-shadow': '0px 0px 7px white', filter: ('invert('+(tmp.bw.gte(0.5)?'1':'0')+')')}" class="slow">
+		<div v-if="!gameData.started" class="nohover" style="width: 100%; height: 100%;">
+			<br><br><br>
+			<span class="title">ESCAPE</span><br>
+			<span class="smoltitle">FROM</span><br>
+			<span class="beegtitle">VANTABLACK</span><br><br><br><br>
+			<table style="flex-flow: column nowrap;">
+				<tr style="flex-flow: row nowrap;">
+					<td style="padding: 0 0 0 0;"><div class="newsBufferL"></div></td>
+					<td style="padding: 0 0 0 0;"><div id="outerNews"><span id="innerNews" v-bind:style="{'margin-left': (gameData.newsMarj+'px'), opacity: ((gameData.newsMarj<(gameData.newsLength*(-1))||gameData.newsRS)?'0':'1')}" style="opacity: 0; white-space: nowrap;" v-html="gameData.newsMsg"></span></div></td>
+					<td style="padding: 0 0 0 0;"><div class="newsBufferR"></div></td>
+				</tr>
+			</table>
+			<br><br><br><br>
+			<button class="rigid" onclick="gameData.started = true;">BEGIN</button>
+		</div>
+		<div v-if="gameData.started&&tmp.bw.eq(1)&&(player.chapter1complete||player.reversalTimer>=0)&&!player.reverseSceneActive" v-bind:style="{visibility: (player.chapter1complete?'visible':'hidden'), opacity: (player.chapter1complete?'100%':'0%')}" class="grand cutscene slow" style="background: radial-gradient(ellipse at 50% 30%, #d5f0b9,#b2bf8f,#8b9c6b,#314722,#000000); color: black; filter: brightness(150%); overflow: hidden !important;">
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<span class="grand nohover" v-bind:style="{visibility: ((player.cutscene1time>=5)?'visible':'hidden'), opacity: ((player.cutscene1time>=5)?'100%':'0%')}">{{tmp.cutscene1txt}}</span><br><br><br>
+			<button v-bind:style="{visibility: ((player.cutscene1time>=5)?'visible':'hidden'), opacity: ((player.cutscene1time>=5)?'100%':'0%')}" class="slow unlocked small" onclick="player.cutscene1pushes = Math.min(player.cutscene1pushes+1, 18); if (player.cutscene1pushes==18) beginReversal()">Continue</button>
+		</div>
+		<div v-if="gameData.started&&player.gameOverTimer>=4.5" v-bind:style="{visibility: (player.gameOver?'visible':'hidden'), opacity: (player.gameOver?'100%':'0%')}" class="grand" style="overflow: hidden;">
+			<br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<span class="title nohover" style="color: red; text-shadow: 0px 0px 7px red;">THE END</span><span style="font-size: 9px; color: #050505;" class="nohover">?</span><br><br>
+			<button class="small unlocked" onclick="hardReset()"><span class="grand">START OVER</span></button><br>
+		</div>
+		<div v-if="gameData.started&&player.badEndingTimer>=4.5&&player.gameOverTimer<4.5" style="overflow: hidden; height: 100%;">
+			<div v-bind:style="{visibility: ((player.badEndingTimer>=5&&player.gameOverTimer==0)?'visible':'hidden'), opacity: ((player.badEndingTimer>=5&&player.gameOverTimer==0)?'100%':'0%'), transform: ('scale('+(player.badEndPushes==27?'10)':'1)'))}" class="grand cutscene slow" style="background: radial-gradient(ellipse at 50% 30%, #000000,#150526,#160626,#28096b,#672de3,#815cd1,#504275,#312940,#28242b,#000000); color: white; filter: brightness(75%); background-size: cover; background-position: center; height: 100%;">
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<span class="grand nohover slightlybigtxt" v-bind:style="{visibility: (player.badEndingStarted?'visible':'hidden'), opacity: (player.badEndingStarted?'100%':'0%')}">{{tmp.badEndCutsceneTxt}}</span><br><br><br>
+				<button v-bind:style="{visibility: ((player.badEndingStarted&&player.badEndPushes<27)?'visible':'hidden'), opacity: (player.badEndingStarted?'100%':'0%')}" class="slow unlocked small" onclick="player.badEndPushes = Math.min(player.badEndPushes+1, 27);">Continue</button>
+			</div>
+		</div>
+		<div v-if="gameData.started&&player.goodEndingTimer>=4.5&&player.gameOverTimer<4.5" style="overflow: hidden; height: 100%;">
+			<div v-bind:style="{visibility: ((player.goodEndingTimer>=5&&player.gameOverTimer==0&&player.goodEndPushes<40)?'visible':'hidden'), opacity: ((player.goodEndingTimer>=5&&player.gameOverTimer==0&&player.goodEndPushes<40)?'100%':'0%')}" class="grand cutscene slow" style="background: radial-gradient(ellipse at 50% 30%, #d5f0b9,#b2bf8f,#8b9c6b,#314722,#000000); color: black; filter: brightness(150%); background-size: cover; background-position: center; height: 100%; overflow: hidden;">
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<span class="grand nohover slightlybigtxt" v-bind:style="{visibility: (player.goodEndingStarted?'visible':'hidden'), opacity: (player.goodEndingStarted?'100%':'0%')}">{{tmp.goodEndCutsceneTxt}}</span><br><br><br>
+				<button v-bind:style="{visibility: ((player.goodEndingStarted&&player.goodEndPushes<40)?'visible':'hidden'), opacity: (player.goodEndingStarted?'100%':'0%')}" class="slow unlocked small" onclick="player.goodEndPushes = Math.min(player.goodEndPushes+1, 40);">Continue</button>
+			</div>
+		</div>
+		<div v-if="gameData.started&&((!player.chapter1complete&&player.reversalTimer==-1)||(player.reverseSceneActive&&player.badEndingTimer<4&&player.goodEndingTimer<4))" class="slow" v-bind:style="{visibility: ((tmp.bw.lt(1)&&!(player.reverseSceneActive&&(player.totalPhotons.lt(1)||tmp.bw.eq(1))))?'visible':'hidden'), opacity: ((tmp.bw.lt(1)&&!(player.reverseSceneActive&&(player.totalPhotons.lt(1)||tmp.bw.eq(1))))?'100%':'0%')}">
+			<div v-bind:style="{visibility: (player.totalPhotons.gte(5)?'visible':'hidden'), opacity: (player.totalPhotons.gte(5)?'100%':'0%')}" class="outerBar slow">
+				<div class="innerBar" v-bind:style="{width: (tmp.bw.times(100).toNumber()+'%')}"></div>
+				<span style="position: absolute; top: 0; mix-blend-mode: difference;" class="grand nohover"><h4 style="margin-bottom: 0; margin-top: 5px;">{{format(tmp.bw.times(100))}}%</h4></span>
+			</div><br>
+			<span v-if="player.reverseSceneActive" class="grand nohover"  v-bind:style="{visibility: ((player.totalPhotons.gt(1))?'visible':'hidden'), opacity: ((player.totalPhotons.gt(1))?'100%':'0%')}">Due to the presence of Vantablack in this universe, your Photons, Total Photons, & Photon gain are being divided by {{format(player.reversalDiv)}} every second, and you can no longer create Photons manually.<br><br></span>
+			<span v-bind:style="{visibility: (player.totalPhotons.gte(3)?'visible':'hidden'), opacity: (player.totalPhotons.gte(3)?'100%':'0%')}" class="slow grand nohover">{{formatWhole(player.photons)}} Photons<span v-bind:style="{visibility: ((player.totalPhotons.gt(player.photons)||player.totalPhotons.gt(9e15))?'visible':'hidden'), opacity: ((player.totalPhotons.gt(player.photons)||player.totalPhotons.gt(9e15))?'100%':'0%')}" class="grand"> (Total: {{formatWhole(player.totalPhotons)}})</span></span>
+			<table v-bind:style="{transform: ('scaleY('+(player.totalPhotons.gte(1e6)?'1':'0')+')'), visibility: (player.totalPhotons.gte(1e6)?'visible':'hidden'), opacity: (player.totalPhotons.gte(1e6)?'100%':'0%')}">
+				<tr>
+					<td v-for="t in allTabs"><button v-if="tabUnlocks[t]()" v-bind:class="{smallw: true, unlocked: true, [t.toLowerCase().replaceAll(' ', '_')]: true}" v-bind:style="{filter: ('invert('+((tmp.bw.gte(0.5)&&t=='True Photonics')?'1':'0')+')')}" v-on:click="tab = t; forceAppUpd();">{{t}}</button></td>
+				</tr>
+			</table>
+			<span v-bind:style="{transform: ('scaleY('+(player.totalPhotons.gte(1e6)?'1':'0')+')')}"><br><br></span>
+			<div v-if="tab=='Options'">
+				<table>
+					<tr>
+						<td><button class="unlocked options" onclick="toggleAutosave()">Autosave: {{player.autosave?"ON":"OFF"}}</button></td>
+						<td><button class="small unlocked options" onclick="save()">Save</button><br>
+						<button class="small unlocked options" onclick="importSave()">Import</button></td>
+						<td><button class="small unlocked" style="background-color: #820000;" onclick="hardReset()">HARD RESET</button><br>
+						<button class="small unlocked options" onclick="exportSave()">Export</button></td>
+					</tr>
+				</table>
+			</div>
+			<div v-if="tab=='Main'">
+				<br><br>
+				<button v-bind:style="{visibility: ((player.timePlayed>=1&&!player.reverseSceneActive)?'visible':'hidden'), opacity: (player.timePlayed>=1&&!player.reverseSceneActive)?'100%':'0%'}" v-bind:class="{slow: true, grand: true, unlocked: true}" onclick="createLight()"><h4>Let there be light!<br>{{(player.lightCooldown>0)?formatTime(player.lightCooldown):""}}</h4></button><br><br>
+				
+				<table v-if="player.forceAppUpdTimer==0">
+					<tr v-for="r in UPG_DATA.rows">
+						<td v-for="(n,i) in UPG_DATA.rowData[r]"><button style="position: relative; font-size: 13px;" v-bind:style="{visibility: (player.totalPhotons.gte(UPG_DATA[n].req)?'visible':'hidden'), opacity: player.totalPhotons.gte(UPG_DATA[n].req)?'100%':'0%'}" v-bind:class="{slow: true, grand: true, unlocked: player.photons.gte(tmp.c[n]), locked: player.photons.lt(tmp.c[n])}" v-on:click="buyUpg(n)"><span class="grand idloc" style="position: absolute; top: 0;">{{n}}</span><h4 v-bind:style="{'margin-bottom': 0}">{{checkFunc(UPG_DATA[n].title)}}</h4><br>Level {{formatWhole(player.upgs[n])+(tmp.x[n].gt(0)?(" + "+format(tmp.x[n])):"")}}<br>Currently: <span v-if="UPG_DATA[n].pref!==undefined" v-html="UPG_DATA[n].pref" class="grand"></span>{{formatWhether(tmp.u[n])}}<span v-if="UPG_DATA[n].suf!==undefined" v-html="UPG_DATA[n].suf" class="grand"></span><br>Cost: {{formatWhole(tmp.c[n])}} Photons</button></td>
+					</tr>
+				</table>
+			</div>
+			<div v-if="tab=='Pair Production'">
+				<span class="grand nohover" v-bind:style="{visibility: (player.totalPhotons.lt(1e8)?'visible':'hidden'), opacity: player.totalPhotons.lt(1e8)?'100%':'0%'}">Reach 100,000,000 Total Photons to begin the process of Pair Production</span>
+				<div class="grand nohover" v-bind:style="{visibility: (player.totalPhotons.gte(1e8)?'visible':'hidden'), opacity: player.totalPhotons.gte(1e8)?'100%':'0%'}">
+					Next Pair Production at {{formatWhole(tmp.npp)}} Total Photons<br><br>
+					<table> 
+						<tr>
+							<td style="margin-right: 80px;"><h3 style="color: #8882ff; margin: 0 auto; text-shadow: 0px 0px 7px black;">Positrons: {{formatWhole(player.positrons)}}</h3><br></td>
+							<td><h3 style="color: #d9ff03; margin: 0 auto;">Electrons: {{formatWhole(player.electrons)}}</h3><br></td>
+						</tr>
+						<tr>
+							<td style="margin-right: 80px;"><button v-bind:class="{locked: player.positrons.lt(1), unlocked: player.positrons.gte(1), pair_production: player.positrons.gte(1)}" onclick="annihilatePP(-1)">Annihilate a Positron for 1- Charge</button></td>
+							<td><button v-bind:class="{locked: player.electrons.lt(1), unlocked: player.electrons.gte(1), pair_production: player.electrons.gte(1)}" onclick="annihilatePP(1)">Annihilate an Electron for 1+ Charge</button></td>
+						</tr>
+					</table>
+					<button v-if="tmp.bw.gte(.5)" v-bind:class="{locked: player.positrons.max(player.electrons).lt(1), unlocked: player.positrons.max(player.electrons).gte(1), pair_production: player.positrons.max(player.electrons).gte(1)}" onclick="annihilatePP(0)">Swap Charges</button>
+					<br><br>
+					<h3 style="color: #71ab9a; margin: 0 auto; text-shadow: 0px 0px 7px black;">Net Charge: {{(player.charge.gt(0)?"+":"")+formatWhole(player.charge)}}</h3><br><br>
+					<h3 style="margin: 0 auto;" v-bind:style="{color: (player.charge.eq(0)?'white':(player.charge.gt(0)?'#8882ff':'#d9ff03')), 'text-shadow': (player.charge.gt(0)?'0px 0px 7px black':'0px 0px 7px white')}">Effect: {{player.charge.eq(0)?"None":(player.charge.gt(0)?("Add "+format(tmp.crge)+" Levels to Photon Upgrade 3 & 5"):("Add "+format(tmp.crge)+" Levels to Photon Upgrade 2 & 4"))}}</h3>
+				</div>
+			</div>
+			<div v-if="tab=='Lumens'" class="grand">
+				Photon Production Rate: <b class="grand">{{format(tmp.phr)}}/s</b><br>
+				<h3 class="grand" style="color: #ffee00;">Lumens: {{format(tmp.lum)}}, which multiply Photon gain by {{format(tmp.lumEff)}}</h3><br><br>
+				<table>
+					<tr v-for="r in LUM_UPG_DATA.rows">
+						<td v-for="(n,i) in LUM_UPG_DATA.rowData[r]" v-if="LUM_UPG_DATA[n].unl()"><button style="position: relative; font-size: 13px;" v-bind:class="{slow: true, grand: true, unlocked: tmp.lum.gte(tmp.lc[n]), locked: tmp.lum.lt(tmp.lc[n])}" v-on:click="buyLumUpg(n)"><span class="grand idloc" style="position: absolute; top: 0;">{{n}}</span><h4 v-bind:style="{'margin-bottom': 0}">{{checkFunc(LUM_UPG_DATA[n].title)}}</h4><br>Level {{formatWhole(player.lumUpgs[n])+(tmp.lx[n].gt(0)?(" + "+format(tmp.lx[n])):"")}}<br>Currently: <span v-if="LUM_UPG_DATA[n].pref!==undefined" v-html="LUM_UPG_DATA[n].pref" class="grand"></span>{{formatWhether(tmp.lu[n])}}<span v-if="LUM_UPG_DATA[n].suf!==undefined" v-html="LUM_UPG_DATA[n].suf" class="grand"></span><br>Req: {{format(tmp.lc[n])}} Lumens</button></td>
+					</tr>
+				</table>
+			</div>
+			<div v-if="tab=='Growth'" class="grand nohover">
+				<table>
+					<tr>
+						<td style="margin-right: 120px;" class="mind grand bigtxt">MIND: {{formatWhole(tmp.mind)}}</td>
+						<td class="strength grand bigtxt">STRENGTH: {{formatWhole(tmp.strength)}}</td>
+					</tr>
+					<tr>
+						<td style="margin-right: 150px;"><button v-bind:class="{growth: player.mindStrengthAuto!='Mind', unlocked: player.mindStrengthAuto!='Mind', bought: player.mindStrengthAuto=='Mind'}" onclick="boostMind()"><span class="grand">Mind+</span></button></td>
+						<td><button v-bind:class="{growth: player.mindStrengthAuto!='Strength', unlocked: player.mindStrengthAuto!='Strength', bought: player.mindStrengthAuto=='Strength'}" onclick="boostStrength()"><span class="grand">Strength+</span></button></td>
+					</tr>
+					<tr>
+						<td style="margin-right: 120px;">
+							<div class="smolOuterBar slow" style="margin-right: 30px;">
+								<div class="smolInnerBar" v-bind:style="{width: (player.mindXP.div(tmp.mindReq).times(100).min(100).toNumber()+'%')}"></div>
+								<span style="mix-blend-mode: difference;" class="grand nohover"><h4 style="margin-bottom: 0; margin-top: 5px;">{{format(player.mindXP.div(tmp.mindReq).times(100).min(100))}}%</h4></span>
+							</div>
+						</td>
+						<td>
+							<div class="smolOuterBar slow" style="margin-left: 30px;">
+								<div class="smolInnerBar" v-bind:style="{width: (player.strengthXP.div(tmp.strengthReq).times(100).min(100).toNumber()+'%')}"></div>
+								<span style="mix-blend-mode: difference;" class="grand nohover"><h4 style="margin-bottom: 0; margin-top: 5px;">{{format(player.strengthXP.div(tmp.strengthReq).times(100).min(100))}}%</h4></span>
+							</div>
+						</td>
+					</tr>
+					<tr><td><br><br></td></tr>
+					<tr>
+						<td style="width: 30%;">Mind Boost: <b class="mind grand">Lumen Upgrades 1 & 2 are given {{format(tmp.mnde)}} extra levels, and the Mind/Strength Automaton is {{format(tmp.mnde2)}}x faster</b></td>
+						<td style="width: 30%;">Strength Boost: <b class="strength grand">Pair Production requirement is divided by {{formatWhole(tmp.stre)}}, and Mind/Strength progress gain is multiplied by {{format(tmp.stre2)}}</b></td>
+					</tr>
+				</table>
+			</div>
+			<div v-if="tab=='True Photonics'">
+				<span class="grand nohover">You have {{formatWhole(player.truePhotons)}} True Photons, which are multiplying Photon gain by {{format(tmp.tphe)}}<br><br>
+				Current Boost Effect: Increase the True Photon effect exponent by {{format(Decimal.pow(1.2, player.truePhotBought).sub(Decimal.pow(1.4, player.badTruePhotBought)).times(100))}}% & increase its gain speed by {{format(Decimal.pow(1.01, player.truePhotBought-player.badTruePhotBought).sub(1).times(100))}}%</span><br><br><br>
+				<table>
+					<tr v-for="r in tmp.tphr">
+						<td v-for="i in tmp.tphc"><button class="grand true_photonics unlocked title" v-bind:style="{filter: ('invert('+(tmp.bw.gte(0.5)?(tmp.lsel==(i+5*(r-1))?'1':'0'):(tmp.lsel==(i+5*(r-1))?'0':'1'))+')')}" v-on:click="truePhotonBtn(i+5*(r-1))">{{(tmp.lsel==(i+5*(r-1)))?"+":"-"}}</button></td>
+					</tr>
+				</table>
+
+			</div>
+		</div>
+	</div>
+	<!--
+		..- ..--- ----. -.-- -.-. -. -.- --. -... -- ---.. --. --.- ...- .--- .... .. .... .-. --- .- -..- -- --. -.. --. .-.. - --.. ... .- -.... -.- --.- -...- -...-
+	-->
+</body>

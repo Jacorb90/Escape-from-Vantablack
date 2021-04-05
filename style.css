@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@300&display=swap');
+
+@font-face {
+    font-family: Summit;
+	font-weight: bold;
+    src: url("SummitBold-Display.otf") format("opentype");
+}
+
+* {
+	font-family: Geneva, sans-serif;
+	text-align: center;
+	transition-duration: 0.2s;
+}
+
+*:focus { 
+	outline: thin dotted; 
+}
+
+.title {
+	font-family: 'Summit';
+	font-size: 60px;
+	font-weight: bold;
+}
+
+.smoltitle {
+	font-family: 'Summit';
+	font-size: 40px;
+	font-weight: bold;
+}
+
+.beegtitle {
+	font-family: 'Summit';
+	font-size: 80px;
+	font-weight: bold;
+}
+
+.grand {
+	font-family: 'Averia Serif Libre', cursive;
+}
+
+html, body, #app {
+	overflow-x: hidden;
+	min-height: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+table, tr, .table {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+	flex-flow: column wrap;
+}
+
+tr, .tableRow {
+    flex-flow: row wrap;
+}
+
+.reallybigtxt {
+	font-size: 80px;
+	font-weight: bold;
+}
+
+.bigtxt {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.slightlyBigText {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.smalltxt {
+	font-size: 11px;
+}
+
+button {
+	border: solid 3px black;
+	border-radius: 25%;
+	background-color: white;
+    font-size: 14px;
+	cursor: default;
+	width: 100px;
+	height: 100px;
+}
+
+button.small {
+	width: 75px;
+	height: 50px;
+}
+
+button.smallw {
+	width: 100px;
+	height: 50px;
+}
+
+button.big, button.grand {
+	width: 150px;
+	height: 150px;
+}
+
+button.reallyBig {
+	width: 200px;
+	height: 200px;
+}
+
+.autoDiv {
+	width: 200px;
+	height: 200px;
+	border: 1px solid white;
+	border-radius: 15%;
+}
+
+.locked {
+	background-color: #820000;
+	color: white;
+	cursor: not-allowed;
+}
+
+.unlocked {
+	background-color: #73755f;
+	color: white;
+	cursor: pointer;
+}
+
+.unlocked:hover {
+	background-color: #acad71;
+	transform: scale(1.1);
+}
+
+.bought {
+	background-color: #13f23d;
+	color: black;
+	cursor: default;
+}
+
+.rigid {
+	background-color: #85ffc8;
+	border: 1px solid white;
+	border-radius: 0;
+	color: black;
+	font-family: 'Summit';
+	font-size: 42px;
+	height: 150px;
+	width: 300px;
+	cursor: pointer;
+}
+
+.rigid:hover {
+	filter: brightness(1.1);
+	transform: scale(1.1);
+}
+
+.slow {
+	transition-duration: 5s !important;
+}
+
+.outerBar {
+	height: 30px;
+	min-width: 50%;
+	width: 50%;
+	background-color: #fafafa;
+	margin-left: 25%;
+	border-radius: 5px;
+}
+
+.innerBar {
+	height: 30px;
+	background-color: #242424;
+	border-radius: 5px;
+	transform: scale(0.9);
+}
+
+.smolOuterBar {
+	height: 20px;
+	min-width: 50px;
+	width: 50px;
+	background-color: #fafafa;
+	border-radius: 5px;
+}
+
+.smolInnerBar {
+	height: 20px;
+	background-color: #242424;
+	border-radius: 5px;
+	transform: scale(0.9);
+}
+
+.nohover { cursor: default; }
+
+.pair_production {
+	background-color: #71ab9a;
+}
+
+.pair_production:hover {
+	background-color: #6da693;
+	transform: scale(1.1);
+}
+
+button .idloc {
+	opacity: 0;
+}
+
+button:hover .idloc {
+	opacity: 1;
+}
+
+button:focus .idloc {
+	opacity: 1;
+}
+
+.lumens {
+	background: radial-gradient(#ffaa00, #ffee00, #bbff00);
+	animation: bgRG ease 5s infinite;
+	color: black;
+}
+
+.lumens:hover {
+	filter: brightness(110%);
+	transform: scale(1.1);
+}
+
+.growth {
+	background: linear-gradient(45deg, #44ff00, #00ffdd, #00ffff, #00ffdd, #44ff00);
+	animation: bgRG ease 10s infinite;
+	color: black;
+}
+
+.growth:hover {
+	filter: brightness(110%);
+	transform: scale(1.1);
+}
+
+.mind {
+	background: linear-gradient(#ee00ff, #ff00ee, #ff0099, #ff00ee, #ee00ff);
+	background-size: 400% 400%;
+	background-clip: text;
+	text-fill-color: transparent;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: textBG 6s ease infinite;
+	filter: brightness(150%);
+}
+
+.strength {
+	background: linear-gradient(#ff0000, #ff6600, #ffaa00, #ff6600, #ff0000);
+	background-size: 400% 400%;
+	background-clip: text;
+	text-fill-color: transparent;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: textBG 6s ease infinite;
+}
+
+.cutscene {
+	height: 100%; 
+}
+
+.cutscene > span {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+::selection {
+    color: none;
+    background: none;
+}
+
+.true_photonics {
+	background: radial-gradient(ellipse at center, #ffffff, #f7ffb3, #f2ff87, #f2ff3b, #eeff00);
+	animation: bgRG ease 10s infinite;
+	color: black;
+}
+
+.true_photonics:hover {
+	filter: brightness(110%);
+	transform: scale(1.1);
+}
+
+#outerNews {
+	display: inline-block;
+	height: 25px;
+	width: 700px;
+	background-color: white;
+	color: black;
+	border-top: 4px solid #888888;
+	border-bottom: 4px solid #888888;
+	text-align: left;
+	z-index: -1;
+	padding: 0 0 0 0;
+}
+
+#innerNews {
+	position: relative;
+	font-family: 'Summit';
+	z-index: 0;
+	font-size: 16px;
+}
+
+.newsBufferL {
+	position: relative;
+	height: 33px;
+	width: 100000px;
+	background-color: black;
+	border-right: 4px solid #888888;
+	z-index: 100000000;
+	padding: 0 0 0 0;
+}
+
+.newsBufferR {
+	position: relative;
+	height: 33px;
+	width: 100000px;
+	background-color: black;
+	border-left: 4px solid #888888;
+	z-index: 100000000;
+	padding: 0 0 0 0;
+}
+
+@keyframes bgRG {
+	0% {
+		background-size: 100% 100%;
+	}
+	25% {
+		background-size: 110% 110%;
+	}
+	75% {
+		background-size: 90% 90%;
+	}
+	100% {
+		background-size: 100% 100%;
+	}
+}
+
+@keyframes textBG {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
