@@ -88,3 +88,14 @@ function checkFunc(f) {
 	if (isFunc(f)) return f();
 	else return f;
 }
+
+function NaNCheck(x, d=false) {
+	if (d) {
+		x = new Decimal(x);
+		if (isNaN(x.sign)||isNaN(x.layer)||isNaN(x.mag)) return new Decimal(0);
+		else return x;
+	} else {
+		if (isNaN(x)) return 0;
+		else return x;
+	}
+}

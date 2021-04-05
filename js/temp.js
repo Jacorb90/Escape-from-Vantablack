@@ -1,4 +1,4 @@
-function updateTemp(diff) {
+function updateTemp() {
 	tmp.cutscene1txt = CUT_DATA[1][player.cutscene1pushes];
 	tmp.badEndCutsceneTxt = CUT_DATA[2][player.badEndPushes]; 
 	tmp.goodEndCutsceneTxt = CUT_DATA[3][player.goodEndPushes]; // Canon ending :P
@@ -11,7 +11,7 @@ function updateTemp(diff) {
 	
 	tmp.tph = new Decimal("4e84");
 	tmp.bw = percent(player.totalPhotons);
-	tmp.phr = player.photons.sub(player.prevPhotons).div(player.prevDiff).max(player.reverseSceneActive?(-1/0):0);
+	tmp.phr = NaNCheck(player.photons.sub(player.prevPhotons).div(player.prevDiff).max(player.reverseSceneActive?(-1/0):0), true);
 	tmp.lum = tmp.phr.div(1.12e16).abs();
 	tmp.lumEff = getLumensEff();
 	

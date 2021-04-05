@@ -35,7 +35,7 @@ function loadGame() {
 	updateTemp();
 	loadVue();
 	
-	intervals.game = setInterval(function() { gameLoop(Math.max((new Date().getTime() - player.currTime)/1000, 0)) }, 50)
+	intervals.game = setInterval(function() { gameLoop(NaNCheck(Math.max((new Date().getTime() - player.currTime)/1000, 0))) }, 50)
 	intervals.save = setInterval(function() { if (player.autosave) save(); }, 2500)
 }
 
@@ -83,7 +83,7 @@ function hardReset() {
 function gameLoop(diff, warped=false) {
 	player.currTime = new Date().getTime();
 	
-	updateTemp(diff);
+	updateTemp();
 	
 	if (!gameData.started) newsTick(diff);
 	
@@ -119,7 +119,7 @@ function gameLoop(diff, warped=false) {
 	}
 	
 	if (!gameLooping()) return;
-	diff = Math.max((player.currTime - player.currGameTime)/1000, 0);
+	diff = NaNCheck(Math.max((player.currTime - player.currGameTime)/1000, 0));
 	player.timePlayed += diff;
 	player.lightCooldown = Math.max(player.lightCooldown-diff, 0);
 	player.autoCooldown = Math.max(player.autoCooldown-diff, 0);
