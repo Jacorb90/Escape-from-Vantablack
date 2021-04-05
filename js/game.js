@@ -81,9 +81,9 @@ function hardReset() {
 }
 
 function gameLoop(diff, warped=false) {
-	updateTemp();
-	
 	player.currTime = new Date().getTime();
+	
+	updateTemp(diff);
 	
 	if (!gameData.started) newsTick(diff);
 	
@@ -124,6 +124,7 @@ function gameLoop(diff, warped=false) {
 	player.lightCooldown = Math.max(player.lightCooldown-diff, 0);
 	player.autoCooldown = Math.max(player.autoCooldown-diff, 0);
 	player.prevPhotons = new Decimal(player.photons);
+	player.prevDiff = diff;
 	if (tmp.u[3].gt(0) && player.autoCooldown==0) {
 		let mult = tmp.u[2].times(tmp.lumEff).times(tmp.lu[2]).times(tmp.u[9]).times(tmp.tphe).div(player.revRateDiv);
 		let u3 = tmp.u[3].min(tmp.u[1].div(2));

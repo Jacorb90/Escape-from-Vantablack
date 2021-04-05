@@ -4,6 +4,7 @@ function getStartPlayer() {
 		currGameTime: new Date().getTime(),
 		timePlayed: 0,
 		prevPhotons: new Decimal(0),
+		prevDiff: 1/20,
 		photons: new Decimal(0),
 		totalPhotons: new Decimal(0),
 		lightCooldown: 0,
